@@ -1,0 +1,263 @@
+
+/*
+*默认样式
+*/
+body {
+    margin: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #4d4d4d;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:#a6b3cb;
+    font-style: italic;
+}
+
+button {
+    outline: none;
+    border: none;
+    background: none;
+}
+
+@media all and (min-width: 900px) {
+
+
+    .contain {
+        width: 1000px;
+        margin: 100px auto;
+        border: 1px solid #f7f7f7;
+        background: #f5f5f5;
+    }
+
+    .title {
+        width: 100%;
+        height: 160px;
+        margin-top: 100px;
+        text-align: center;
+        line-height: 160px;
+        font-size: 160px;
+        color: rgba(175, 47, 47, 0.15);
+    }
+
+    .section {
+        width: 700px;
+        margin: 20px auto 100px ;
+        background: #fff;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .input {
+        width: 100%;
+        height: 100px;
+        box-sizing: border-box;
+        padding: 16px 32px 16px 80px;
+        font-size: 32px;
+        color: #4d4d4d;
+        outline: none;
+        border: none;
+        box-shadow: inset 0 -2px 1px rgba(0,0,0,0.05);
+    }
+
+    .section footer {
+        width: 100%;
+        height: 40px;
+        padding: 10px 25px;
+        box-sizing: border-box;
+        color: #555;
+        border-top: 1px solid #e6e6e6;
+    }
+
+
+    .ul li {
+        position: relative;
+        min-height: 77;
+        font-size: 32px;
+        border-bottom: 1px solid #ededed;
+    }
+
+    .ul li:hover .button {
+        display: block;
+    }
+    .ul li:last-child {
+        border-bottom: none;
+    }
+
+
+
+
+
+
+    .toggle {
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto 0;
+        margin-left: 20px;
+        text-align: center;
+        outline: none;
+        -webkit-appearance: none;
+    }
+
+    .toggle[status=true]::before {
+        content: url('../img/checkbox.png');
+    }
+
+    .toggle[status='true']:checked::before {
+        content: url('../img/checkbox1.png');
+    }
+
+
+
+
+
+
+    .toggle[status='false']::before {
+        content: url('../img/checkbox1.png');
+    }
+
+    .toggle[status='false']:checked::before {
+        content: url('../img/checkbox.png');
+    }
+
+
+
+
+
+
+
+    .toggle[status='true'] + .todo {
+        word-wrap: break-word;
+        margin-left: 80px;
+        padding: 20px 80px 20px 10px;
+        transition: color 0.4s;
+        color: #4d4d4d;
+        text-decoration: none;
+    }
+
+    .toggle[status='true']:checked + .todo {
+        text-decoration: line-through;
+        color: #d9d9d9;
+    }
+
+    .toggle[status='false'] + .todo {
+        word-wrap: break-word;
+        margin-left: 80px;
+        padding: 20px 80px 20px 10px;
+        transition: color 0.4s;
+        text-decoration: line-through;
+        color: #d9d9d9;
+    }
+
+    .toggle[status='false']:checked + .todo {
+        text-decoration: none;
+        color: #4d4d4d;
+        word-wrap: break-word;
+        margin-left: 80px;
+        padding: 20px 80px 20px 10px;
+        transition: color 0.4s;
+    }
+
+    .button {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 10px;
+            bottom: 0;
+            width: 40px;
+            height: 40px;
+            margin: auto 0;
+            font-size: 30px;
+            color: #cc9a9a;
+            margin-bottom: 11px;
+            transition: color 0.2s ease-out;
+            font-size: 36px;
+            cursor: pointer;
+    }
+
+    .button::after {
+        content: '×';
+    }
+
+
+    .num {
+        width: 160px;
+        height: 100%;
+        line-height: 100%;
+        color: #777;
+        font-size: 16px;
+        display: inline-block;
+        margin-right: 30px;
+    }
+
+        
+
+    .all, .active, .complete {
+        display: inline-block;
+        padding: 0 12px;
+        height: 100%;
+        text-align: center;
+        line-height: 19px;
+        font-size: 16px;
+        border-radius: 4;
+        cursor: pointer;
+        margin-right: 25px;
+        border: 1px solid transparent;
+    }
+
+    .all:hover,.active:hover,.complete:hover {
+        border: 1px solid;
+        border-color: rgba(175, 47, 47, 0.2);
+    }
+
+    .all.clicked, .active.clicked, .complete.clicked {
+        border-color: rgba(175, 47, 47, 0.2);
+    }
+
+    .clear {
+        display: inline-block;
+        height: 100%;
+        margin-left: 50px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .clear:hover {
+        text-decoration: underline;
+    }
+
+    .list {
+        display: block;
+    }
+
+    .editing .list {
+        display: none;
+    }
+
+    .edit {
+        display: none;
+        outline: none;
+        width: 618px;
+        min-height: 77px;
+        box-sizing: border-box;
+        margin-left: 80px;
+        padding: 20px 80px 20px 20px;
+        font-size: 32px;
+        color: #4d4d4d;
+        border: 1px solid #999;
+        box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .editing .edit {
+        display: block;
+    }
+
+}
+

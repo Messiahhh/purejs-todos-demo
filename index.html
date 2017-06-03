@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.2/??flexible_css.js,flexible.js"></script>
+    <link rel="stylesheet" href="./static/css/a.css">
+    <link rel="stylesheet" href="./static/css/mobile.css">
+    <title>TODOS</title>
+</head>
+<body>
+    <div class="contain">
+        <div class="title">todos</div>
+        <div class="section">
+            <input type='text' placeholder='What needs to be done?' class="input"></input>
+            <ul class='ul'></ul>
+            <footer>
+                <div class="num">By Messiah</div>
+                <div class="all btn clicked">All</div>
+                <div class="active btn">Active</div>
+                <div class="complete btn">Completed</div>
+                <div class="clear">Clear all</div>
+            </footer>
+        </div>
+    </div>
+    <script src='./static/js/ejs.min.js'></script>    
+    <script type='text/template' class='tpl'>
+
+    <% for (let i in localStorage) {%>
+        <li>
+            <div class='list'>
+                <input type="checkbox" class='toggle' index=<%= i %> status=<%= JSON.parse(localStorage[i]).status %>>
+                <div class='todo'><%= JSON.parse(localStorage[i]).val %></div>
+                <button class='button'></button>
+            </div>
+            <input class='edit'></input>
+        </li>
+    <% } %>
+  
+    </script>
+    <script>
+        //根据带clicked的class的元素的all/active/complete渲染页面
+        let forBtn = () => {
+            let btns = document.querySelectorAll('.btn')
+            btns = Array.from(btns)
+            btns.forEach((item) => {
+                let list = item.classList
+                if (list.contains('clicked')) {
+                    if (list.contains('all')) {
+                        changeStatus('all')
+                    }
+                    if (list.contains('active')) {
+                        changeStatus(true)
+                    }
+                    if (list.contains('complete')) {
+                        changeStatus(false)
+                    }
+                }
+            })
+        }
+        //切换按钮
+        let btns = document.querySelectorAll('.btn')
+            btns = Array.from(btns)
+            btns.forEach((item) => {
+                item.addEventListener('click', function () {
+                    let list = this.classList
+                    if (list.contains('clicked')) {
+                        return false
+                    }
+                    else {
+                        btns.forEach((item) => {
+                            let list = item.classList
+                            if (list.contains('clicked')) {
+                                list.remove('clicked')
+                            }
+                        })
+                        list.add('clicked')
+                        if (list.contains('all')) {
+                            changeStatus('all')
+                        }
+                        if (list.contains('active')) {
+                            changeStatus(true)
+                        }
+                        if (list.contains('complete')) {
+                            changeStatus(false)
+                        }
+                    }
+                })
+            })
+
+
+
+        //渲染页面函数
+        let changeStatus = (flag) => {
+            //渲染
+            let ul = document.querySelector('.ul')
+            let tpl = document.querySelector('.tpl').innerHTML
+            let html 
+            if (flag === 'all') {
+                html = ejs.render(tpl, {localStorage: localStorage})
+            }
+            else {
+                let storage = {}
+                storage.__proto__ = localStorage.__proto__
+                for (let i in localStorage) {
+                    if (flag === JSON.parse(localStorage[i]).status) {
+                        storage[i] = localStorage[i]
+                    }
+                }
+                html = ejs.render(tpl, {localStorage: storage})
+            }
+            ul.innerHTML = html
+
+
+            //点击按钮切换todo状态
+            let buttons = document.querySelectorAll('.toggle')
+            buttons = Array.from(buttons)
+            buttons.forEach((item) => {
+                item.addEventListener('click', function () {
+                    let index = this.getAttribute('index')
+                    let json = JSON.parse(localStorage.getItem(index))
+                    let val = json.val
+                    let status = json.status
+                    localStorage.setItem(index, JSON.stringify({
+                        val,
+                        status: !status,
+                    }))
+                    forBtn()
+                })
+            })
+
+            //删除todo
+            let deletes = document.querySelectorAll('.button')
+            deletes = Array.from(deletes)
+            deletes.forEach((item) => {
+                item.addEventListener('click', function () {
+                    let index = this.parentNode.children[0].getAttribute('index')
+                    localStorage.removeItem(index)
+                    forBtn()
+                })
+            })
+
+            //双击切换输入框，输入来更改数据
+            let li = document.querySelectorAll('.list')
+            li = Array.from(li)
+            li.forEach((item) => {
+                item.addEventListener('dblclick', function () {
+                    let list = this.parentNode
+                    list.classList.add('editing')
+                    let val = this.children[1].innerHTML
+                    let edit = this.parentNode.querySelector('.edit')
+                    edit.focus()
+                    edit.value = val
+                    edit.addEventListener('blur', function () {
+                        let value = this.value
+                        let index = list.children[0].children[0].getAttribute('index')
+                        let json = JSON.parse(localStorage.getItem(index))
+                        let val = json.val
+                        let status = json.status
+                        localStorage.setItem(index, JSON.stringify({
+                            val: value,
+                            status,
+                        }))
+                        list.classList.remove('editing')
+                        forBtn()
+                    });
+                    edit.addEventListener('keydown', function (e) {
+                        if (e.keyCode === 13) {
+                            let value = this.value
+                            let index = list.children[0].children[0].getAttribute('index')
+                            let json = JSON.parse(localStorage.getItem(index))
+                            let val = json.val
+                            let status = json.status
+                            localStorage.setItem(index, JSON.stringify({
+                                val: value,
+                                status,
+                            }))
+                            list.classList.remove('editing')
+                            forBtn()
+                        }
+                    })
+                })
+            })
+        }
+
+
+        //初始渲染
+        changeStatus('all')
+
+        //status 为true为待办事项 为false则已经完成
+        //增加todo的事情
+        let input = document.querySelector('.input')
+        input.addEventListener('keydown', (e) => {
+            if (e.keyCode === 13) {
+                let val = event.target.value
+                let status = true
+                let time = (new Date()).getTime()
+                let serialize = JSON.stringify({
+                    val,
+                    status
+                })
+                localStorage.setItem(time, serialize)
+                event.target.value = ''
+                forBtn()
+            }
+        })
+      
+        //清除全部todo
+        let clear = document.querySelector('.clear')
+        clear.addEventListener('click', function () {
+            localStorage.clear()
+            changeStatus('all')
+        })
+
+
+
+
+        
+    </script>
+</body>
+</html>
