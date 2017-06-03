@@ -7,7 +7,7 @@ const {fs, url, qs, pack, getBody} = require('./lib/node-server')
 // const conn = require('./services/connect_mysql');
 // const client = require('./services/connect_redis');
 
-const port = 3000
+const port = 3001
 
 http.createServer((req, res) => {
 
@@ -44,6 +44,6 @@ http.createServer((req, res) => {
         });
     }
 
-}).listen(3000, () => {
+}).listen(port, () => {
     console.log(`app is listening at ${port} port`)
 })
